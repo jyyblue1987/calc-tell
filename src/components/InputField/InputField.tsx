@@ -4,16 +4,17 @@ import { COLORS, DEFAULTS } from "../../consts/styles";
 
 export interface InputFieldProps {
   onChange: (val: string) => void;
+  onPeriodChange: (val: number) => void;
 }
 
-const InputField: FC<InputFieldProps> = ({onChange}) => {
+const InputField: FC<InputFieldProps> = ({onChange, onPeriodChange}) => {
   return (
     <Container>
       <label>$</label>
       <Input onChange={(e) => onChange(e.target.value)} />
-      <select name="cars" id="cars">
-        <option value="volvo">per year</option>
-        <option value="saab">per week</option>
+      <select name="cars" id="cars" onChange={(e) => onPeriodChange(parseInt(e.target.value))}>
+        <option value="1">per year</option>
+        <option value="52">per week</option>
       </select>
     </Container>
   );
