@@ -8,22 +8,22 @@ import Output from "../components/Output/Output";
 import { useDispatch, useSelector } from "react-redux";
 import { increment, 
           salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, 
-          otherIncomePeriodChange , addOther, deleteOther
+          otherIncomePeriodChange , addOther, deleteOther, deleteAllOther,
+          addLoan, loanChange, deleteLoan, deleteAllLoan
           } from "../store/store";
 import { RootState } from "../store/store";
 import OtherField from "../components/InputField/OtherField";
+import LoanField from "../components/InputField/LoanField";
 
 
 export interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const dispatch = useDispatch();
-  const {other_list} = useSelector((state: RootState) => state.counter);
+  const {other_list, loan_list} = useSelector((state: RootState) => state.counter);
 
 
   const [mode, setMode] = useState(1);
-  const [other, setOther] = useState(0);
-
   return (
     <Container>
       <Content>
@@ -73,7 +73,6 @@ const Home: FC<HomeProps> = () => {
                 title="Yes"
                 name="option1"
                 onClick={() => {
-                  setOther(1);
                   dispatch(addOther());
                 }}
               />
@@ -81,8 +80,7 @@ const Home: FC<HomeProps> = () => {
                 title="No"
                 name="option1"
                 onClick={() => {
-                  setOther(2);
-                  
+                  dispatch(deleteAllOther())
                 }}
               />
               {/* <Button title="I'm buying with someone" name="option1" /> */}
@@ -103,6 +101,42 @@ const Home: FC<HomeProps> = () => {
             {
               other_list.length > 0 &&
               <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addOther())}>Add Other Income</button>
+            }
+
+            <Label text="Do you have any loans?" />
+            <span>
+              <Button
+                title=" Yes "
+                name="option2"
+                onClick={() => {
+                  console.log("addLoan")
+                  dispatch(addLoan());
+                }}
+              />
+              <Button
+                title=" No "
+                name="option2"
+                onClick={() => {
+                  dispatch(deleteAllLoan())
+                }}
+              />
+              {/* <Button title="I'm buying with someone" name="option1" /> */}
+            </span>
+            {
+              loan_list.map((row, index) => (
+                <div key={index}>
+                  <Label text={'Other income #' + (index + 1) }/>
+                  <span>
+                    <LoanField onChange={(value: string) => dispatch(loanChange({index, value: Number(value)})) }                     
+                    onDelete={() => dispatch(deleteLoan(index))} 
+                    />
+                  </span>
+                </div>
+              ))
+            }
+            {
+              loan_list.length > 0 &&
+              <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addLoan())}>Add Loan</button>
             }
           </FormContainer>
           <CalculationContainer>            

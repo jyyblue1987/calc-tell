@@ -13,16 +13,15 @@ export interface Button2Props {
 const Button: FC<Button2Props> = ({ title, checked, name, onClick }) => {
   return (
     <>
-      <Container onClick={() => onclick}>
+      <Container>
         <input
-          type="radio"
-          value={title}
+          type="radio"          
           id={title}
           name={name}
           defaultChecked={checked}
-          onChange={() => onClick()}
+          
         />
-        <label htmlFor={title} onClick={() => onclick}>
+        <label htmlFor={title} onClick={() => onClick()}>
           {title}
         </label>
       </Container>

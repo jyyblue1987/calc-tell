@@ -13,22 +13,26 @@ interface Param1 {
 export interface CurrencyState {
   borrow: number;
   income: number;
+  loan: 0;
   salary1: number,
   salary1_period: number,
   salary2: number,  
   salary2_period: number,
   other_list: PeriodValue[],  
+  loan_list: number[],
 }
 
 
 const initialState: CurrencyState = {
   borrow: 0,
   income: 0,
+  loan: 0,
   salary1: 0,
   salary1_period: 1,
   salary2: 0,
   salary2_period: 1,
-  other_list: []
+  other_list: [],
+  loan_list: [],
 };
 
 const updateState = (state: CurrencyState) => {
@@ -36,7 +40,11 @@ const updateState = (state: CurrencyState) => {
   for(var i = 0; i < state.other_list.length; i++)
     state.income += state.other_list[i].value * state.other_list[i].period;
 
-  state.borrow = state.income * 5;      
+  state.loan = 0
+  for(var i = 0; i < state.loan_list.length; i++)
+    state.loan += state.loan_list[i];
+
+  state.borrow = state.income * 5 - state.loan;      
 }
 
 export const counterSlice = createSlice({
@@ -81,29 +89,41 @@ export const counterSlice = createSlice({
       state.other_list = [... state.other_list].filter((item, index) => index != action.payload)
       updateState(state);
     },
+    deleteAllOther: (state: CurrencyState) => {
+      state.other_list = []
+      updateState(state);
+    },
     otherIncomeChange: (state: CurrencyState, action: PayloadAction<Param1>) => {      
-      var cloned_list = [... state.other_list];
-      state.other_list = [];
-      for(var i = 0; i < cloned_list.length; i++)
-      {
-        if( i == action.payload.index )
-          state.other_list.push({value: action.payload.value, period: cloned_list[i].period});
-        else
-          state.other_list.push(cloned_list[i]);
-      }
+      state.other_list = [... state.other_list].map((item:PeriodValue, index: number) => {
+        return action.payload.index == index ? {value: action.payload.value, period: item.period} : item; 
+      });
+  
       updateState(state);
     },
     otherIncomePeriodChange: (state: CurrencyState, action: PayloadAction<Param1>) => {
-      var cloned_list = [... state.other_list];
-      state.other_list = [];
-      for(var i = 0; i < cloned_list.length; i++)
-      {
-        if( i == action.payload.index )
-          state.other_list.push({value: cloned_list[i].value, period: action.payload.value});
-        else
-          state.other_list.push(cloned_list[i]);
-      }
+      state.other_list = [... state.other_list].map((item:PeriodValue, index: number) => {
+        return action.payload.index == index ? {value: item.value, period: action.payload.value} : item; 
+      });  
 
+      updateState(state);
+    },
+    addLoan: (state: CurrencyState) => {
+      state.loan_list.push(0);
+      updateState(state);
+    },
+    deleteLoan: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.loan_list = [... state.loan_list].filter((item, index) => index != action.payload)
+      updateState(state);
+    },
+    deleteAllLoan: (state: CurrencyState) => {
+      state.loan_list = []
+      updateState(state);
+    },
+    loanChange: (state: CurrencyState, action: PayloadAction<Param1>) => {      
+      state.loan_list = [... state.loan_list].map((item: number, index: number) => {
+        return action.payload.index == index ? action.payload.value : item;
+      });
+      
       updateState(state);
     },
   },
@@ -112,7 +132,8 @@ export const counterSlice = createSlice({
 export const { 
   increment, decrement, incrementByAmount, 
   salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, 
-  otherIncomeChange, otherIncomePeriodChange, addOther, deleteOther 
+  otherIncomeChange, otherIncomePeriodChange, addOther, deleteOther, deleteAllOther,
+  loanChange, addLoan, deleteLoan, deleteAllLoan
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
