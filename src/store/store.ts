@@ -15,11 +15,13 @@ export interface CurrencyState {
   income: number;
   loan: 0;
   deposit: number;
+  credit: number;
   salary1: number,
   salary1_period: number,
   salary2: number,  
   salary2_period: number,
   other_list: PeriodValue[],  
+  credit_list: number[],
   loan_list: number[],
 }
 
@@ -29,11 +31,13 @@ const initialState: CurrencyState = {
   income: 0,
   loan: 0,
   deposit: 0,
+  credit: 0,
   salary1: 0,
   salary1_period: 1,
   salary2: 0,
   salary2_period: 1,
   other_list: [],
+  credit_list: [],
   loan_list: [],
 };
 
@@ -46,7 +50,12 @@ const updateState = (state: CurrencyState) => {
   for(var i = 0; i < state.loan_list.length; i++)
     state.loan += state.loan_list[i];
 
-  state.borrow = state.income * 5 - state.loan;      
+  
+  state.credit = 0
+  for(var i = 0; i < state.credit_list.length; i++)
+    state.credit += state.credit_list[i];
+
+  state.borrow = state.income * 5 - state.loan - state.credit;      
 }
 
 export const counterSlice = createSlice({
@@ -132,6 +141,25 @@ export const counterSlice = createSlice({
       state.deposit = action.payload;
       updateState(state);
     },
+    addCredit: (state: CurrencyState) => {
+      state.credit_list.push(0);
+      updateState(state);
+    },
+    deleteCredit: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.credit_list = [... state.credit_list].filter((item, index) => index != action.payload)
+      updateState(state);
+    },
+    deleteAllCredit: (state: CurrencyState) => {
+      state.credit_list = []
+      updateState(state);
+    },
+    creditChange: (state: CurrencyState, action: PayloadAction<Param1>) => {      
+      state.credit_list = [... state.credit_list].map((item: number, index: number) => {
+        return action.payload.index == index ? action.payload.value : item;
+      });
+      
+      updateState(state);
+    },
   },
 });
 
@@ -140,6 +168,7 @@ export const {
   salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, 
   otherIncomeChange, otherIncomePeriodChange, addOther, deleteOther, deleteAllOther,
   loanChange, addLoan, deleteLoan, deleteAllLoan,
+  creditChange, addCredit, deleteCredit, deleteAllCredit,
   depositChange
 } = counterSlice.actions;
 

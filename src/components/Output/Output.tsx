@@ -5,7 +5,7 @@ import { RootState } from "../../store/store";
 export interface OutputProps {}
 
 const Output: React.FC<OutputProps> = () => {
-  const {borrow, income, loan, deposit} = useSelector((state: RootState) => state.counter);
+  const {borrow, income, loan, deposit, credit} = useSelector((state: RootState) => state.counter);
 
   return <Container>
             <p>Here's what you can borrow</p>
@@ -27,6 +27,14 @@ const Output: React.FC<OutputProps> = () => {
               <div>
                 <p style={{marginTop: 20}}>Total loans</p>
                 ${loan}
+              </div>
+            }
+
+            {
+              credit > 0 && 
+              <div>
+                <p style={{marginTop: 20}}>Total credit cards</p>
+                ${credit}
               </div>
             }
           </Container>;

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { increment, 
           salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, 
           otherIncomePeriodChange , addOther, deleteOther, deleteAllOther,
-          addLoan, loanChange, deleteLoan, deleteAllLoan, depositChange
+          addLoan, loanChange, deleteLoan, deleteAllLoan, depositChange, addCredit, deleteCredit, deleteAllCredit, creditChange
           } from "../store/store";
 import { RootState } from "../store/store";
 import OtherField from "../components/InputField/OtherField";
@@ -21,7 +21,7 @@ export interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const dispatch = useDispatch();
-  const {other_list, loan_list} = useSelector((state: RootState) => state.counter);
+  const {other_list, loan_list, credit_list} = useSelector((state: RootState) => state.counter);
 
 
   const [mode, setMode] = useState(1);
@@ -138,6 +138,41 @@ const Home: FC<HomeProps> = () => {
             {
               loan_list.length > 0 &&
               <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addLoan())}>Add Loan</button>
+            }
+
+            <Label text="Do you have any credit cards?" />
+            <span>
+              <Button
+                title="  Yes  "
+                name="option2"
+                onClick={() => {                  
+                  dispatch(addCredit());
+                }}
+              />
+              <Button
+                title="  No  "
+                name="option2"
+                onClick={() => {
+                  dispatch(deleteAllCredit())
+                }}
+              />
+              {/* <Button title="I'm buying with someone" name="option1" /> */}
+            </span>
+            {
+              credit_list.map((row, index) => (
+                <div key={index}>
+                  <Label text={'Loan #' + (index + 1) }/>
+                  <span>
+                    <LoanField onChange={(value: string) => dispatch(creditChange({index, value: Number(value)})) }                     
+                    onDelete={() => dispatch(deleteCredit(index))} 
+                    />
+                  </span>
+                </div>
+              ))
+            }
+            {
+              credit_list.length > 0 &&
+              <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addCredit())}>Add credit card</button>
             }
 
             <Label text="How much deposite do you have?" />
