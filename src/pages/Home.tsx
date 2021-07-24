@@ -144,14 +144,14 @@ const Home: FC<HomeProps> = () => {
             <span>
               <Button
                 title="  Yes  "
-                name="option2"
+                name="option3"
                 onClick={() => {                  
                   dispatch(addCredit());
                 }}
               />
               <Button
                 title="  No  "
-                name="option2"
+                name="option3"
                 onClick={() => {
                   dispatch(deleteAllCredit())
                 }}
