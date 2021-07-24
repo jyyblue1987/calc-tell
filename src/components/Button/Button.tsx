@@ -48,6 +48,7 @@ const Container = styled.div`
 
   input {
     position: fixed;
+    display: none;
     :checked + label {
       background-color: ${COLORS.activeBtn};
       color: ${COLORS.textActiveBtn};
