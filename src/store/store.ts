@@ -1,30 +1,36 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface CounterState {
-  value: number;
+export interface CurrencyState {
+  borrow: number;
+  income: number;
 }
 
-const initialState: CounterState = {
-  value: 0,
+const initialState: CurrencyState = {
+  borrow: 0,
+  income: 0
 };
 
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    increment: (state: CurrencyState) => {
+      state.borrow += 1;
     },
-    decrement: (state) => {
-      state.value -= 1;
+    decrement: (state: CurrencyState) => {
+      state.borrow -= 1;
     },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    incrementByAmount: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.borrow += action.payload;
+    },
+    salaryChange: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.borrow = action.payload * 5;
+      state.income = action.payload;
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount, salaryChange } = counterSlice.actions;
 
 export default counterSlice.reducer;
 

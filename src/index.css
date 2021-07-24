@@ -8,6 +8,10 @@ body {
   background-color: #c2c1c6;
 }
 
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 /* :root {
  
 } */

@@ -2,13 +2,15 @@ import { FC } from "react";
 import styled from "styled-components";
 import { COLORS, DEFAULTS } from "../../consts/styles";
 
-export interface InputFieldProps {}
+export interface InputFieldProps {
+  onChange: (val: string) => void;
+}
 
-const InputField: FC<InputFieldProps> = () => {
+const InputField: FC<InputFieldProps> = ({onChange}) => {
   return (
     <Container>
       <label>$</label>
-      <Input />
+      <Input onChange={(e) => onChange(e.target.value)} />
       <select name="cars" id="cars">
         <option value="volvo">per year</option>
         <option value="saab">per week</option>

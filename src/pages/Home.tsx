@@ -6,7 +6,7 @@ import Label from "../components/Label/Label";
 import InputField from "../components/InputField/InputField";
 import Output from "../components/Output/Output";
 import { useDispatch } from "react-redux";
-import { increment } from "../store/store";
+import { increment, salaryChange } from "../store/store";
 
 export interface HomeProps {}
 
@@ -33,20 +33,12 @@ const Home: FC<HomeProps> = () => {
               />
               {/* <Button title="I'm buying with someone" name="option1" /> */}
             </span>
-            <Label text="How many of you are buying the property?" />
-            <button onClick={() => dispatch(increment())}>TESTING</button>
-
-            <span>
-              {/* <Button title="X" name="option2" />
-              <Button title="Y" name="option2" checked /> */}
-            </span>
             <Label text="What's your base salary/wages? (before tax)" />
             <span>
-              <InputField />
+              <InputField onChange={(val: string) => dispatch(salaryChange(Number(val))) } />
             </span>
           </FormContainer>
-          <CalculationContainer>
-            <h2>Result</h2>
+          <CalculationContainer>            
             <Output />
           </CalculationContainer>
         </section>
@@ -92,5 +84,5 @@ const FormContainer = styled.div`
 const CalculationContainer = styled.div`
   border: 1px dashed green;
   width: 40%;
-  padding: 20px;
+  padding: 10px;  
 `;
