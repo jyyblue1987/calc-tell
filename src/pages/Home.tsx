@@ -63,7 +63,7 @@ const Home: FC<HomeProps> = () => {
               </div>
             }
 
-            <Label text="Other income #1" />
+            <Label text="Do you have another source of income?" />
             <span>
               <Button
                 title="Yes"
@@ -86,7 +86,7 @@ const Home: FC<HomeProps> = () => {
             {
               other_list.map((row, index) => (
                 <div key={index}>
-                  <Label text="Other income" />
+                  <Label text={'Other income #' + (index + 1) }/>
                   <span>
                     <InputField onChange={(value: string) => dispatch(otherIncomeChange({index, value: Number(value)})) } 
                     onPeriodChange={(value: number) => dispatch(otherIncomePeriodChange({index, value: Number(value)}))} 
@@ -94,8 +94,10 @@ const Home: FC<HomeProps> = () => {
                   </span>
                 </div>
               ))
-
-              
+            }
+            {
+              other_list.length > 0 &&
+              <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addOther())}>Add Other Income</button>
             }
           </FormContainer>
           <CalculationContainer>            
