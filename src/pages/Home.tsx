@@ -6,8 +6,12 @@ import Label from "../components/Label/Label";
 import InputField from "../components/InputField/InputField";
 import Output from "../components/Output/Output";
 import { useDispatch, useSelector } from "react-redux";
-import { increment, salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, otherIncomePeriodChange , addOther} from "../store/store";
+import { increment, 
+          salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, 
+          otherIncomePeriodChange , addOther, deleteOther
+          } from "../store/store";
 import { RootState } from "../store/store";
+import OtherField from "../components/InputField/OtherField";
 
 
 export interface HomeProps {}
@@ -88,8 +92,9 @@ const Home: FC<HomeProps> = () => {
                 <div key={index}>
                   <Label text={'Other income #' + (index + 1) }/>
                   <span>
-                    <InputField onChange={(value: string) => dispatch(otherIncomeChange({index, value: Number(value)})) } 
+                    <OtherField onChange={(value: string) => dispatch(otherIncomeChange({index, value: Number(value)})) } 
                     onPeriodChange={(value: number) => dispatch(otherIncomePeriodChange({index, value: Number(value)}))} 
+                    onDelete={() => dispatch(deleteOther(index))} 
                     />
                   </span>
                 </div>

@@ -77,6 +77,10 @@ export const counterSlice = createSlice({
       });
       updateState(state);
     },
+    deleteOther: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.other_list = [... state.other_list].filter((item, index) => index != action.payload)
+      updateState(state);
+    },
     otherIncomeChange: (state: CurrencyState, action: PayloadAction<Param1>) => {      
       var cloned_list = [... state.other_list];
       state.other_list = [];
@@ -105,7 +109,11 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount, salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, otherIncomeChange, otherIncomePeriodChange, addOther } = counterSlice.actions;
+export const { 
+  increment, decrement, incrementByAmount, 
+  salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, 
+  otherIncomeChange, otherIncomePeriodChange, addOther, deleteOther 
+} = counterSlice.actions;
 
 export default counterSlice.reducer;
 
