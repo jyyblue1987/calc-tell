@@ -20,7 +20,7 @@ const Button: FC<Button2Props> = ({ title, checked, name, onClick }) => {
           id={title}
           name={name}
           defaultChecked={checked}
-          onChange={() => onclick}
+          onChange={() => onClick()}
         />
         <label htmlFor={title} onClick={() => onclick}>
           {title}
