@@ -5,13 +5,17 @@ import Header from "../components/Header/Header";
 import Label from "../components/Label/Label";
 import InputField from "../components/InputField/InputField";
 import Output from "../components/Output/Output";
-import { useDispatch } from "react-redux";
-import { increment, salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, otherIncomePeriodChange } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { increment, salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, otherIncomePeriodChange , addOther} from "../store/store";
+import { RootState } from "../store/store";
+
 
 export interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const dispatch = useDispatch();
+  const {other_list} = useSelector((state: RootState) => state.counter);
+
 
   const [mode, setMode] = useState(1);
   const [other, setOther] = useState(0);
@@ -66,7 +70,7 @@ const Home: FC<HomeProps> = () => {
                 name="option1"
                 onClick={() => {
                   setOther(1);
-                  dispatch(otherIncomeChange(0));
+                  dispatch(addOther());
                 }}
               />
               <Button
@@ -74,21 +78,24 @@ const Home: FC<HomeProps> = () => {
                 name="option1"
                 onClick={() => {
                   setOther(2);
-                  dispatch(otherIncomeChange(0));
+                  
                 }}
               />
               {/* <Button title="I'm buying with someone" name="option1" /> */}
             </span>
             {
-              other === 1 &&
-              <div>
-                <Label text="Other income" />
-                <span>
-                  <InputField onChange={(val: string) => dispatch(otherIncomeChange(Number(val))) } 
-                  onPeriodChange={(val: number) => dispatch(otherIncomePeriodChange(val))} 
-                  />
-                </span>
-              </div>
+              other_list.map((row, index) => (
+                <div key={index}>
+                  <Label text="Other income" />
+                  <span>
+                    <InputField onChange={(value: string) => dispatch(otherIncomeChange({index, value: Number(value)})) } 
+                    onPeriodChange={(value: number) => dispatch(otherIncomePeriodChange({index, value: Number(value)}))} 
+                    />
+                  </span>
+                </div>
+              ))
+
+              
             }
           </FormContainer>
           <CalculationContainer>            

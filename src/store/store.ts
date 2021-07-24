@@ -1,5 +1,15 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface PeriodValue {
+  value: number,
+  period: number,
+}
+
+interface Param1 {
+  index: number,
+  value: number
+}
+
 export interface CurrencyState {
   borrow: number;
   income: number;
@@ -7,9 +17,9 @@ export interface CurrencyState {
   salary1_period: number,
   salary2: number,  
   salary2_period: number,
-  other: number,
-  other_period: number,
+  other_list: PeriodValue[],  
 }
+
 
 const initialState: CurrencyState = {
   borrow: 0,
@@ -18,12 +28,14 @@ const initialState: CurrencyState = {
   salary1_period: 1,
   salary2: 0,
   salary2_period: 1,
-  other: 0,
-  other_period: 1
+  other_list: []
 };
 
 const updateState = (state: CurrencyState) => {
-  state.income = (state.salary1 * state.salary1_period + state.salary2 * state.salary2_period + state.other * state.other_period);
+  state.income = (state.salary1 * state.salary1_period + state.salary2 * state.salary2_period);
+  for(var i = 0; i < state.other_list.length; i++)
+    state.income += state.other_list[i].value * state.other_list[i].period;
+
   state.borrow = state.income * 5;      
 }
 
@@ -58,18 +70,42 @@ export const counterSlice = createSlice({
       state.salary2_period = action.payload;
       updateState(state);
     },
-    otherIncomeChange: (state: CurrencyState, action: PayloadAction<number>) => {
-      state.other = action.payload;
+    addOther: (state: CurrencyState) => {
+      state.other_list.push({
+        value: 0,
+        period: 1
+      });
       updateState(state);
     },
-    otherIncomePeriodChange: (state: CurrencyState, action: PayloadAction<number>) => {
-      state.other_period = action.payload;
+    otherIncomeChange: (state: CurrencyState, action: PayloadAction<Param1>) => {      
+      var cloned_list = [... state.other_list];
+      state.other_list = [];
+      for(var i = 0; i < cloned_list.length; i++)
+      {
+        if( i == action.payload.index )
+          state.other_list.push({value: action.payload.value, period: cloned_list[i].period});
+        else
+          state.other_list.push(cloned_list[i]);
+      }
+      updateState(state);
+    },
+    otherIncomePeriodChange: (state: CurrencyState, action: PayloadAction<Param1>) => {
+      var cloned_list = [... state.other_list];
+      state.other_list = [];
+      for(var i = 0; i < cloned_list.length; i++)
+      {
+        if( i == action.payload.index )
+          state.other_list.push({value: cloned_list[i].value, period: action.payload.value});
+        else
+          state.other_list.push(cloned_list[i]);
+      }
+
       updateState(state);
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount, salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, otherIncomeChange, otherIncomePeriodChange } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount, salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, otherIncomeChange, otherIncomePeriodChange, addOther } = counterSlice.actions;
 
 export default counterSlice.reducer;
 
