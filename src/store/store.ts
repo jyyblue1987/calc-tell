@@ -14,6 +14,7 @@ export interface CurrencyState {
   borrow: number;
   income: number;
   loan: 0;
+  deposit: number;
   salary1: number,
   salary1_period: number,
   salary2: number,  
@@ -27,6 +28,7 @@ const initialState: CurrencyState = {
   borrow: 0,
   income: 0,
   loan: 0,
+  deposit: 0,
   salary1: 0,
   salary1_period: 1,
   salary2: 0,
@@ -126,6 +128,10 @@ export const counterSlice = createSlice({
       
       updateState(state);
     },
+    depositChange: (state: CurrencyState, action: PayloadAction<number>) => {
+      state.deposit = action.payload;
+      updateState(state);
+    },
   },
 });
 
@@ -133,7 +139,8 @@ export const {
   increment, decrement, incrementByAmount, 
   salaryChange, salaryPeriodChange, salary2Change, salary2PeriodChange, 
   otherIncomeChange, otherIncomePeriodChange, addOther, deleteOther, deleteAllOther,
-  loanChange, addLoan, deleteLoan, deleteAllLoan
+  loanChange, addLoan, deleteLoan, deleteAllLoan,
+  depositChange
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

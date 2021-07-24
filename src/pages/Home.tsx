@@ -9,11 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { increment, 
           salaryChange, salary2Change, otherIncomeChange, salaryPeriodChange, salary2PeriodChange, 
           otherIncomePeriodChange , addOther, deleteOther, deleteAllOther,
-          addLoan, loanChange, deleteLoan, deleteAllLoan
+          addLoan, loanChange, deleteLoan, deleteAllLoan, depositChange
           } from "../store/store";
 import { RootState } from "../store/store";
 import OtherField from "../components/InputField/OtherField";
 import LoanField from "../components/InputField/LoanField";
+import DepositField from "../components/InputField/DepositField";
 
 
 export interface HomeProps {}
@@ -125,7 +126,7 @@ const Home: FC<HomeProps> = () => {
             {
               loan_list.map((row, index) => (
                 <div key={index}>
-                  <Label text={'Other income #' + (index + 1) }/>
+                  <Label text={'Loan #' + (index + 1) }/>
                   <span>
                     <LoanField onChange={(value: string) => dispatch(loanChange({index, value: Number(value)})) }                     
                     onDelete={() => dispatch(deleteLoan(index))} 
@@ -138,6 +139,12 @@ const Home: FC<HomeProps> = () => {
               loan_list.length > 0 &&
               <button style={{width: 200, marginTop: 5}} onClick={() => dispatch(addLoan())}>Add Loan</button>
             }
+
+            <Label text="How much deposite do you have?" />
+            <span>
+              <DepositField onChange={(val: string) => dispatch(depositChange(Number(val))) } 
+                     />
+            </span>
           </FormContainer>
           <CalculationContainer>            
             <Output />
